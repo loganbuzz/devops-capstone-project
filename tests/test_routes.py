@@ -137,3 +137,16 @@ class TestAccountService(TestCase):
         """It should not read a nonexistent account."""
         response = self.client.get(f"{BASE_URL}/{9999}", content_type="application/json")  # Assuming '9999' is an invalid account ID
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  # Assuming 404 for not found
+
+    def test_delete_account(self):
+        """It should delete an account"""
+        account = self._create_accounts(1)[0]
+        response = self.client.delete(
+            f"{BASE_URL}/{account.id}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+    
+    def test_delete_nonexistant_account(self):
+        """Test trying to delete a non-existant account"""
+        response = self.client.delete(f"{BASE_URL}/{9999}")  # Assuming '9999' is an invalid account ID
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  # Assuming 404 for not found
