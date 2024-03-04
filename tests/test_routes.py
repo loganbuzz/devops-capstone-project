@@ -25,6 +25,8 @@ HTTPS_ENVIRON = {'wsgi.url_scheme': 'https'}
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
+
+
 class TestAccountService(TestCase):
     """Account Service Tests"""
 
@@ -37,6 +39,7 @@ class TestAccountService(TestCase):
         app.logger.setLevel(logging.CRITICAL)
         init_db(app)
         talisman.force_https = False
+
 
     @classmethod
     def tearDownClass(cls):
@@ -138,21 +141,20 @@ class TestAccountService(TestCase):
 
     def test_get_nonexistent_account(self):
         """It should not read a nonexistent account."""
-        response = self.client.get(f"{BASE_URL}/{9999}", content_type="application/json")  # Assuming '9999' is an invalid account ID
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  # Assuming 404 for not found
+        response = self.client.get(
+            f"{BASE_URL}/{9999}", content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_account(self):
         """It should delete an account"""
         account = self._create_accounts(1)[0]
-        response = self.client.delete(
-            f"{BASE_URL}/{account.id}"
-        )
+        response = self.client.delete(f"{BASE_URL}/{account.id}")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-    
+
     def test_delete_nonexistant_account(self):
         """Test trying to delete a non-existant account"""
-        response = self.client.delete(f"{BASE_URL}/{9999}")  # Assuming '9999' is an invalid account ID
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  # Assuming 404 for not found
+        response = self.client.delete(f"{BASE_URL}/{9999}")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_update_account(self):
         """It should Update an existing Account"""
@@ -164,16 +166,16 @@ class TestAccountService(TestCase):
         # update the account
         new_account = resp.get_json()
         new_account["name"] = "Something Known"
-        resp = self.client.put(f"{BASE_URL}/{new_account['id']}", json=new_account)
+        resp = self.client.put(
+            f"{BASE_URL}/{new_account['id']}", json=new_account)
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         updated_account = resp.get_json()
         self.assertEqual(updated_account["name"], "Something Known")
 
     def test_update_nonexistant_account(self):
         """It should not update a nonexistent account."""
-        response = self.client.put(f"{BASE_URL}/{9999}", content_type="application/json")  # Assuming '9999' is an invalid account ID
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  # Assuming 404 for not found
-
+        response = self.client.put(f"{BASE_URL}/{9999}", content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_account_list(self):
         """It should Get a list of Accounts"""
