@@ -25,6 +25,7 @@ HTTPS_ENVIRON = {'wsgi.url_scheme': 'https'}
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
+
 class TestAccountService(TestCase):
     """Account Service Tests"""
 
@@ -138,7 +139,7 @@ class TestAccountService(TestCase):
 
     def test_get_nonexistent_account(self):
         """It should not read a nonexistent account."""
-        response = self.client.get(f"{BASE_URL}/{9999}", content_type="application/json")  # Assuming '9999' is an invalid account ID
+        response = self.client.get(f"{BASE_URL}/{9999}", content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  # Assuming 404 for not found
 
     def test_delete_account(self):
@@ -148,7 +149,7 @@ class TestAccountService(TestCase):
             f"{BASE_URL}/{account.id}"
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-    
+
     def test_delete_nonexistant_account(self):
         """Test trying to delete a non-existant account"""
         response = self.client.delete(f"{BASE_URL}/{9999}")  # Assuming '9999' is an invalid account ID
@@ -171,9 +172,8 @@ class TestAccountService(TestCase):
 
     def test_update_nonexistant_account(self):
         """It should not update a nonexistent account."""
-        response = self.client.put(f"{BASE_URL}/{9999}", content_type="application/json")  # Assuming '9999' is an invalid account ID
+        response = self.client.put(f"{BASE_URL}/{9999}", content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)  # Assuming 404 for not found
-
 
     def test_get_account_list(self):
         """It should Get a list of Accounts"""
